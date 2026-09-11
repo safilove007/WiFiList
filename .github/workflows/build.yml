@@ -13,20 +13,18 @@ jobs:
         run: |
           for name in "android-34.jar" "android34.jar" "android-34/android.jar" "android.jar"; do
             URL="https://raw.githubusercontent.com/Reginer/aosp-android-jar/34v2/$name"
-            echo "Trying $URL"
             curl -sL "$URL" -o hidden-android.jar || continue
             SIZE=$(stat -c%s hidden-android.jar 2>/dev/null || echo 0)
-            echo "Got $SIZE bytes"
             if [ "$SIZE" -gt 1000000 ]; then
-              echo "Valid jar found: $name"
               break
             fi
           done
-          ls -la hidden-android.jar
           cp hidden-android.jar "$ANDROID_HOME/platforms/android-34/android.jar"
       - run: chmod +x gradlew
       - run: ./gradlew assembleDebug
+      - name: List output APKs
+        run: find app/build/outputs/apk -name "*.apk"
       - uses: actions/upload-artifact@v4
         with:
           name: app-debug
-          path: app/build/outputs/apk/debug/app-debug.apk
+          path: app/build/outputs/apk/debug/*.apk
