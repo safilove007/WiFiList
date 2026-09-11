@@ -10,10 +10,12 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
       - name: Download hidden-API android.jar
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          ASSET_URL=$(curl -s https://api.github.com/repos/Reginer/aosp-android-jar/releases/tags/34v2 | grep "browser_download_url.*jar" | head -1 | cut -d '"' -f 4)
-          curl -L "$ASSET_URL" -o hidden-android.jar
-          cp hidden-android.jar "$ANDROID_HOME/platforms/android-34/android.jar"
+          gh release download 34v2 --repo Reginer/aosp-android-jar --pattern "*.jar" --dir .
+          JAR_FILE=$(ls *.jar | head -1)
+          cp "$JAR_FILE" "$ANDROID_HOME/platforms/android-34/android.jar"
       - run: chmod +x gradlew
       - run: ./gradlew assembleDebug
       - uses: actions/upload-artifact@v4
