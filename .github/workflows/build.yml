@@ -13,9 +13,11 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release download 34v2 --repo Reginer/aosp-android-jar --pattern "*.jar" --dir .
-          JAR_FILE=$(ls *.jar | head -1)
-          cp "$JAR_FILE" "$ANDROID_HOME/platforms/android-34/android.jar"
+          mkdir hidden-jar
+          gh release download 34v2 --repo Reginer/aosp-android-jar --dir ./hidden-jar
+          ls -la ./hidden-jar
+          JAR_FILE=$(ls -S ./hidden-jar | head -1)
+          cp "./hidden-jar/$JAR_FILE" "$ANDROID_HOME/platforms/android-34/android.jar"
       - run: chmod +x gradlew
       - run: ./gradlew assembleDebug
       - uses: actions/upload-artifact@v4
