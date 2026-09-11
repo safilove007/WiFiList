@@ -6,13 +6,13 @@ plugins {
 }
 
 android {
-    compileSdk = 35
+    compileSdk = 34
     namespace = "tk.zwander.wifilist"
 
     defaultConfig {
         applicationId = "tk.zwander.wifilist"
         minSdk = 30
-        targetSdk = 35
+        targetSdk = 34
         versionCode = 13
         versionName = "1.3.2"
 
